@@ -1,0 +1,9 @@
+### Executables ###
+*.out
+
+### Documentation HTML ###
+doc.html
+
+### Génération du makefile ###
+_build/
+parser_files/
