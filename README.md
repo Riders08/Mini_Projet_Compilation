@@ -19,4 +19,4 @@ Un fichier <vos_noms>.tar.gz ou <vos_noms>.tgz qui contiendra le projet (incluan
 
 #### SI ON REND UN TRUC QUI NE COMPILE PAS C'EST GRAND MAX 10/20
 
-#### Il prefère avoir un projet qui compile mais avec moins de fonctionnalités implémentée que un projet qui compile pas mais qui a implémentée plus de fonctionnalité.
+#### Ils prefèrent avoir un projet qui compile mais avec moins de fonctionnalités implémentée que un projet qui ne compile pas mais qui a implémentée plus de fonctionnalité.

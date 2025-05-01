@@ -130,6 +130,11 @@ let rec one_type_substitution_in_expr (n, t) = function
       one_type_substitution_in_expr (n, t) e3;
       Annotation.set_type ann
         (substitute_univ_in_type n t (Option.get (Annotation.get_type ann)))
+  | Binop (e1, e2, _, ann) ->
+    one_type_substitution_in_expr (n, t) e1;
+    one_type_substitution_in_expr (n, t) e2;
+    Annotation.set_type ann
+      (substitute_univ_in_type n t (Option.get (Annotation.get_type ann)))
 
 let type_substitution_in_expr expr subst =
   List.iter (fun s -> one_type_substitution_in_expr s expr) subst

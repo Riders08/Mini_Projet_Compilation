@@ -72,6 +72,7 @@ type expr =
   | Cst_b of bool * Annotation.t  (** Boolean constant *)
   | Cst_str of string * Annotation.t  (** String constant *)
   | Cst_func of built_in * Annotation.t  (** Built-in function constant *)
+  | Binop of expr * expr * built_in * Annotation.t  (*Binop*)
   | Nil of Annotation.t  (** Empty list constant *)
   | Unit of Annotation.t  (** Unit (empty action) constant *)
   | Var of string * Annotation.t  (** Variable *)

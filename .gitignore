@@ -4,6 +4,9 @@
 ### Documentation HTML ###
 doc.html
 
+### Dossier inutiles ###
+.vscode
+
 ### Génération du makefile ###
 _build/
 parser_files/

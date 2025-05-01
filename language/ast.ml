@@ -79,6 +79,7 @@ type expr =
   | Cst_b of bool * Annotation.t
   | Cst_str of string * Annotation.t
   | Cst_func of built_in * Annotation.t
+  | Binop of expr * expr * built_in * Annotation.t
   | Nil of Annotation.t
   | Unit of Annotation.t
   | Var of string * Annotation.t
@@ -96,6 +97,7 @@ let rec copy_expr = function
   | Cst_b (b, ann) -> Cst_b (b, Annotation.copy ann)
   | Cst_str (s, ann) -> Cst_str (s, Annotation.copy ann)
   | Cst_func (f, ann) -> Cst_func (f, Annotation.copy ann)
+  | Binop (expr1,expr2,op,ann) -> Binop(expr1,expr2,op, Annotation.copy ann)
   | Nil ann -> Nil (Annotation.copy ann)
   | Unit ann -> Unit (Annotation.copy ann)
   | Var (x, ann) -> Var (x, Annotation.copy ann)
@@ -114,6 +116,7 @@ let get_expr_annotation = function
   | Cst_b (_, ann)
   | Cst_str (_, ann)
   | Cst_func (_, ann)
+  | Binop (_,_,_,ann)
   | Nil ann
   | Unit ann
   | Var (_, ann)
@@ -188,11 +191,16 @@ let rec get_result_type prof = function
       if prof <= 1 then t else get_result_type (prof - 1) t_res
   | t -> t
 
+let pp_binop fmt op =
+  Format.fprintf fmt "%s" (string_of_built_in op)
+
 let rec pp_expr extended_syntax print_types fmt = function
   | Cst_i (i, _) -> Format.fprintf fmt "%d" i
   | Cst_b (b, _) -> Format.fprintf fmt "%b" b
   | Cst_str (s, _) -> Format.fprintf fmt "\"%s\"" s
   | Cst_func (b, _) -> Format.fprintf fmt "%s" (string_of_built_in b)
+  | Binop (e1, e2, binop, _) ->
+    Format.fprintf fmt "(%a %a %a)" (pp_expr extended_syntax print_types)  e1 pp_binop binop (pp_expr extended_syntax print_types) e2
   | Nil _ -> Format.fprintf fmt "[]"
   | Unit _ -> Format.fprintf fmt "()"
   | Var (x, ann) -> (

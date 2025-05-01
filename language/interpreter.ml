@@ -177,6 +177,8 @@ let rec interpret_expression env = function
   | Ignore (e1, e2, _) ->
       let _ = interpret_expression env e1 in
       interpret_expression env e2
+  | Binop (_, _, _, _) -> 
+    failwith "Binop not implemented in the interpreter"
 
 let interpret_program env prg =
   List.iter
