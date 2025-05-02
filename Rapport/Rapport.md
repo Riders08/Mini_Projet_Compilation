@@ -124,3 +124,12 @@ Malgré quelques conflits persistants dans le parseur,
 les extensions majeures de syntaxe ont été intégrées et fonctionnent sur des cas d’usage typiques. 
 Les conflits restants sont liés à des ambiguïtés difficiles à lever sans refactorisation plus profonde, 
 mais n’empêchent pas le fonctionnement du langage.
+
+## Typage
+
+### Typage Naive
+
+1. Pour ce qui de l'implémentation de type_util.ml, nous implémenté cela avec un énorme match with en ayant rajouter en amont un argument de type Counter.t.
+Bien sur le fichier type_util.mli a été modifier en conséquence.
+
+2. 

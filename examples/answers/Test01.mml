@@ -1,0 +1,2 @@
+let multiply x y = x * y
+let result = multiply 4 5

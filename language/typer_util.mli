@@ -20,7 +20,7 @@ module Counter : sig
   (** Gets the next value of the counter and increments it. A counter will never return twice the same value. *)
 end
 
-val type_of_built_in : Ast.built_in -> Ast.type_lang
+val type_of_built_in : Counter.t -> Ast.built_in -> Ast.type_lang
 (** Function that returns the type of every built-in function of mini-ml. See {!Ast} for the type to put here. *)
 
 val solve_constraints :
