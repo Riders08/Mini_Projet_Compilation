@@ -1,0 +1,8 @@
+let apply = fun f -> fun x -> f x
+let double = fun x -> x * 2
+let result = apply double 10
+
+(*
+   Ce programme teste la capacité du typeur à gérer une fonction qui prend une fonction
+   en argument. Il illustre la propagation des contraintes de type dans un contexte complexe.
+*)

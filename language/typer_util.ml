@@ -82,8 +82,8 @@ let instantiate counter t =
     match t with
     | TUniv n when Hashtbl.mem subst n -> Hashtbl.find subst n
     | TUniv n ->
-        let fresh = TUniv (Counter.get_fresh counter) in
-        Hashtbl.add subst n fresh;
+        let fresh = TUniv (Counter.get_fresh counter)
+          in Hashtbl.add subst n fresh;
         fresh
     | TFunc (_, a, r) -> TFunc ([], aux a, aux r)
     | TList (_, t1) -> TList ([], aux t1)

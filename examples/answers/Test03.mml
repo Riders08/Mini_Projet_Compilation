@@ -1,0 +1,8 @@
+let add = ( + )
+let inc = add 1
+let result = inc 41
+
+(*
+   Ce programme vérifie que le typeur gère les applications partielles.
+   Il montre aussi que les opérateurs peuvent être passés comme fonctions.
+*)

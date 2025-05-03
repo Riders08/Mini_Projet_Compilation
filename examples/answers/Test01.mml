@@ -1,2 +1,8 @@
-let multiply x y = x * y
-let result = multiply 4 5
+let id = fun x -> x
+let a = id 42
+let b = id true
+
+(*
+   Ce programme teste la capacité du typeur à générer un type générique pour la fonction identité.
+   Il montre également que l’appel applique ce même type.
+*)
