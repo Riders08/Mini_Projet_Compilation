@@ -203,3 +203,38 @@ Enfin, la définition de result qui lui aussi est une application de inc avec le
 Encore une fois, il n'y aucune contrainte supplémentaire ici non plus, car tout est cohérent avec les types précédement générés.
 
 photo arbre 
+
+### Contraintes et polymorphisme faible
+
+1. On peut voir l'implementation de la fonction "solve_constrainsts" dans le fichier typer_util.ml
+
+2. Si l'on prend le deuxième test par exemple, ce programme n'est pas typé correctement car,
+add 2 3 suppose que add est une fonction de type int -> int -> int.
+Mais la fonction add est définie comme : (x ( + ) y) ce qui peut suggèrer que x est une fonction prenant + comme argument, ce qui est faux.
+Donc, ce programme n'est pas bien typé, ni en OCaml ni dans notre projet.
+
+3. Lorsqu'on regarde le programme, le type attendu pour f est une fonction qui prend un argument de type 'a et retourne une valeur du même type 'a. Cela signifie que le type de f est 'a -> 'a
+Ensuite, on applique cette fonction à deux valeurs différentes :
+
+let a = f 1 
+Donc ici on applique la fonction sur un int, 1 
+Par conséquent, f attend un entier et renvoie un entier. Le système de typage conclut que le type de a sera le même que celui de f, à savoir un type int
+
+let b = f " coucou "
+Ou ici on applique la fonction mais sur un string, coucou
+Cette fois, f est appliqué à une chaîne de caractères. Le type de "coucou" est string, donc f doit être une fonction de type string -> 'f. Le système de typage conclut que le type de b est 'f, mais avec une contrainte 'b -> 'b = string -> 'f.
+
+Le problème se situe dans le fait qu'on applique f à deux types différents dans le programme : int et string. Or, la fonction f a été définie comme polymorphique ('b -> 'b), ce qui signifie que si elle est appliquée à un entier dans a et à une chaîne dans b, ces deux applications doivent aboutir à un type commun pour que l’unification soit possible. Mais ici, il n'est pas possible d'unifier int et string, et le système de typage échoue à résoudre cette contradiction.
+
+4. Un exemple qui peut être accepter en OCaml mais pas dans notre projet, ça peut être un exemple comme celui-ci:
+
+```bash
+let f x = x
+let id = f f
+let result = id 5
+```
+
+En fait, OCaml est polymorphe il par du principe que f est de type 'a -> 'a, et donc pour lui 
+f f est de type 'a -> 'a appliqué à 'a -> 'a et donne un 'a -> 'a. Donc OCaml acceptera ce code par exemple.
+Alors que pour nous, notre typeur_naive ne géréralise pas les types de la même façon.
+Quand on affectera F sur lui même il va utilisé f comme argument, ce qui produira une recursivité avec un type inconnu.

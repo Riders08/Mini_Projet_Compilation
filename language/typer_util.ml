@@ -51,6 +51,22 @@ let type_of_built_in (counter : Counter.t) (built_in : built_in) =
   | Print -> let a = TUniv (Counter.get_fresh counter)
               in TFunc ([], a, TUnit)
 
+let instantiate counter t =
+  let subst = Hashtbl.create 10 in
+  let rec aux t =
+    match t with
+    | TUniv n when Hashtbl.mem subst n -> Hashtbl.find subst n
+    | TUniv n ->
+      let fresh = TUniv (Counter.get_fresh counter)
+        in Hashtbl.add subst n fresh;
+      fresh
+    | TFunc (_, a, r) -> TFunc ([], aux a, aux r)
+    | TList (_, t1) -> TList ([], aux t1)
+    | _ -> t
+  in aux t
+
+
+
 let rec occurs n t =
   match t with
   | TUniv m -> m = n
@@ -68,24 +84,10 @@ let rec solve_constraints constraints =
       if occurs n t
         then raise (Constraint_error (TUniv n, t))
       else
-        let subst = [(n, t)] in
-        let rest' = List.map (substitute_constraint n t) rest in
-        let s = solve_constraints rest' in
-        subst @ s
-    | TFunc (_, a1, r1), TFunc (_, a2, r2) -> solve_constraints ((a1, a2) :: (r1, r2) :: rest)
+        let subst = [(n, t)]
+          in let rest' = List.map (fun (t1, t2) -> substitute_constraint n t (t1, t2)) rest
+            in let s = solve_constraints rest'
+              in subst @ s
+    | TFunc (_, t1a, t1r), TFunc (_, t2a, t2r) -> solve_constraints ((t1a, t2a) :: (t1r, t2r) :: rest)
     | TList (_, t1'), TList (_, t2') -> solve_constraints ((t1', t2') :: rest)
     | _, _ -> raise (Constraint_error (t1, t2))
-
-let instantiate counter t =
-  let subst = Hashtbl.create 10 in
-  let rec aux t =
-    match t with
-    | TUniv n when Hashtbl.mem subst n -> Hashtbl.find subst n
-    | TUniv n ->
-        let fresh = TUniv (Counter.get_fresh counter)
-          in Hashtbl.add subst n fresh;
-        fresh
-    | TFunc (_, a, r) -> TFunc ([], aux a, aux r)
-    | TList (_, t1) -> TList ([], aux t1)
-    | _ -> t
-  in aux t
